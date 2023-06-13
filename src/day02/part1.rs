@@ -1,5 +1,58 @@
-use crate::day01::{Input, Output};
+use super::shared::{Outcome, Shape};
+use crate::day02::{Input, Output};
 
 pub fn solve(input: &Input) -> Output {
-    unimplemented!();
+    input
+        .iter()
+        .flat_map(|pair| pair.try_into_outcome())
+        .map(|outcome| outcome.score())
+        .sum::<u32>()
+        .into()
+}
+
+trait TryIntoShape {
+    type Error;
+    fn try_into_shape(&self) -> Result<Shape, Self::Error>;
+}
+
+impl TryIntoShape for char {
+    type Error = &'static str;
+
+    fn try_into_shape(&self) -> Result<Shape, Self::Error> {
+        match self {
+            'A' | 'X' => Ok(Shape::Rock),
+            'B' | 'Y' => Ok(Shape::Paper),
+            'C' | 'Z' => Ok(Shape::Scissors),
+            _ => Err("Character cannot be converted to `Shape`!"),
+        }
+    }
+}
+
+trait TryIntoOutcome {
+    type Error;
+    fn try_into_outcome(&self) -> Result<Outcome, Self::Error>;
+}
+
+impl TryIntoOutcome for (char, char) {
+    type Error = &'static str;
+
+    fn try_into_outcome(&self) -> Result<Outcome, Self::Error> {
+        let (ch1, ch2) = self;
+        let opponent = ch1.try_into_shape()?;
+        let player = ch2.try_into_shape()?;
+
+        use Shape::*;
+        let result = match (opponent, player) {
+            (Rock, Rock) => Outcome::Draw(player),
+            (Rock, Paper) => Outcome::Win(player),
+            (Rock, Scissors) => Outcome::Lose(player),
+            (Paper, Rock) => Outcome::Lose(player),
+            (Paper, Paper) => Outcome::Draw(player),
+            (Paper, Scissors) => Outcome::Win(player),
+            (Scissors, Rock) => Outcome::Win(player),
+            (Scissors, Paper) => Outcome::Lose(player),
+            (Scissors, Scissors) => Outcome::Draw(player),
+        };
+        Ok(result)
+    }
 }

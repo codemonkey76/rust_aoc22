@@ -1,10 +1,11 @@
 pub mod input;
 pub mod part1;
 pub mod part2;
+pub mod shared;
 
 use crate::{Output, Part};
 
-pub type Input = Vec<u32>;
+pub type Input = Vec<(char, char)>;
 
 pub fn run(part: Part) -> Output {
     let input = input::read();

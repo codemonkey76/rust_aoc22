@@ -13,3 +13,4 @@ path = "src/bin.rs"
 
 [dependencies]
 clap = { version = "4.3.3", features = ["derive"] }
+nom = "7.1.3"
