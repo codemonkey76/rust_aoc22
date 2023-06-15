@@ -95,6 +95,7 @@ fn run_timed(day: u8, timer: &Instant) -> TimedResult {
     let run = match day {
         1  => day01::run_both,
         2  => day02::run_both,
+        3  => day03::run_both,
         _ => panic!("There's no day {day} on the Advent Calendar!"),
     };
 
@@ -108,6 +109,7 @@ fn run_day(day: u8) -> RunResult {
     let run = match day {
         1 => day01::run,
         2 => day02::run,
+        3 => day03::run,
         _ => panic!("There's no day {day} on the Advent Calendar!"),
     };
 
