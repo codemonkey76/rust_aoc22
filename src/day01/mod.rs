@@ -19,3 +19,19 @@ pub fn run_both() -> (Output, Output) {
     (part1::solve(&input), part2::solve(&input))
 }
 
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn check_answer_one() {
+        let result = run(Part::One);
+        assert_eq!(result, 69626);
+    }
+
+    #[test]
+    fn check_answer_two() {
+        let result = run(Part::Two);
+        assert_eq!(result, 206780);
+    }
+}

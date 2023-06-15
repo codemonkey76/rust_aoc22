@@ -1,7 +1,10 @@
 use super::shared::{Outcome, Shape};
 use crate::day02::{Input, Output};
 
+/// Solve part one
 pub fn solve(input: &Input) -> Output {
+    // For each pair of characters in the input, convert each to an `Outcome`,
+    // calculate the score of that `Outcome`, and return the total as an `Output`.
     input
         .iter()
         .flat_map(|pair| pair.try_into_outcome())
@@ -10,6 +13,10 @@ pub fn solve(input: &Input) -> Output {
         .into()
 }
 
+/// Trait for converting a character from the input into a `Shape`.
+/// I'm using a trait here so that I can use the same function names
+/// in the two different parts but have them behave differently, while 
+/// sharing some base functionality between the parts.
 trait TryIntoShape {
     type Error;
     fn try_into_shape(&self) -> Result<Shape, Self::Error>;
@@ -18,6 +25,9 @@ trait TryIntoShape {
 impl TryIntoShape for char {
     type Error = &'static str;
 
+    /// Attempt to convert an input character into a `Shape`. Yes, we know
+    /// that there will be no other characters, but I like to practice good
+    /// input hygiene when I can.
     fn try_into_shape(&self) -> Result<Shape, Self::Error> {
         match self {
             'A' | 'X' => Ok(Shape::Rock),
@@ -28,6 +38,8 @@ impl TryIntoShape for char {
     }
 }
 
+/// Trait for converting a pair of characters from the input into an `Outcome`.
+/// Same deal as the other trait above.
 trait TryIntoOutcome {
     type Error;
     fn try_into_outcome(&self) -> Result<Outcome, Self::Error>;
@@ -37,6 +49,7 @@ impl TryIntoOutcome for (char, char) {
     type Error = &'static str;
 
     fn try_into_outcome(&self) -> Result<Outcome, Self::Error> {
+        // Attempt to convert both characters into thir respective `Shape`
         let (ch1, ch2) = self;
         let opponent = ch1.try_into_shape()?;
         let player = ch2.try_into_shape()?;
